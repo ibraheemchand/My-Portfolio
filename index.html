@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ibraheem Chand — CS Student</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Mobile nav drawer -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#projects" class="mobile-link">Projects</a>
+    <a href="#skills" class="mobile-link">Skills</a>
+    <a href="#learning" class="mobile-link">Learning</a>
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">I<span>.</span>C</div>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#learning">Learning</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <p class="hero-tag">Computer Science Student</p>
+          <h1 class="hero-name">C'est<br><em>Ibraheem.</em></h1>
+          <p class="hero-desc">
+            A passionate <strong>systems builder</strong> with the goal to understand how software truly works — and build experiments that reveal the answer.<br><br>
+            Currently studying CS &amp; building things at
+            <a href="https://github.com/IbraheemChand" target="_blank" rel="noopener">GitHub ↗</a>
+          </p>
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">View Projects</a>
+            <a href="#contact" class="btn btn-outline">Get In Touch</a>
+          </div>
+          <div class="scroll-hint">
+            <div class="mouse-icon"></div>
+            Scroll to explore
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-visual-blob">
+            <div class="hero-code-block">
+              <div><span class="cp">class</span> <span class="ct">IbraheemChand</span> {</div>
+              <div>&nbsp;&nbsp;<span class="cp">role</span> = <span class="cg">"CS Student"</span>;</div>
+              <div>&nbsp;&nbsp;<span class="cp">focus</span> = <span class="cg">"Systems"</span>;</div>
+              <div>&nbsp;&nbsp;<span class="cp">loves</span> = [</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cg">"C++", "Linux",</span></div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cg">"Algorithms"</span></div>
+              <div>&nbsp;&nbsp;];</div>
+              <div>}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p class="section-eyebrow">About me</p>
+          <h2 class="section-title">Systems, code,<br>and <em>curiosity</em>.</h2>
+          <div style="height:24px"></div>
+          <p>I'm a <strong>Computer Science student</strong> driven by a simple question: how does software actually work under the hood? From memory management in C++ to how operating systems schedule processes — I want to understand all of it.</p>
+          <p>My approach is experimental. I build <strong>small, focused projects</strong> that isolate concepts, break them under pressure, and reveal how they truly behave.</p>
+          <p>When I'm not coding, I'm reading about compilers, tinkering with Linux, or exploring how distributed systems manage to stay reliable.</p>
+        </div>
+        <div class="about-cards reveal">
+          <!-- copy .about-card to add a stat -->
+          <div class="about-card">
+            <div class="about-card-num">15+</div>
+            <div class="about-card-label">Projects &amp; experiments built</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-num">5+</div>
+            <div class="about-card-label">Programming languages explored</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-num">∞</div>
+            <div class="about-card-label">Concepts still to learn</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS — add category: copy .skill-cat; add skill: copy <span class="pill"> -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-eyebrow reveal">Skills</p>
+      <h2 class="section-title reveal">Tools of <em>the trade</em>.</h2>
+      <p class="section-sub reveal">Languages, tools, and concepts I work with regularly.</p>
+      <div class="skills-grid">
+        <div class="skill-cat reveal">
+          <p class="skill-cat-label">Programming</p>
+          <div class="skill-pills">
+            <span class="pill">C++</span><span class="pill">Python</span><span class="pill">C</span>
+            <span class="pill">JavaScript</span><span class="pill">HTML / CSS</span><span class="pill">Bash</span>
+          </div>
+        </div>
+        <div class="skill-cat reveal">
+          <p class="skill-cat-label">Systems &amp; Tools</p>
+          <div class="skill-pills">
+            <span class="pill">Linux</span><span class="pill">Git</span><span class="pill">GDB</span>
+            <span class="pill">Make</span><span class="pill">VS Code</span><span class="pill">Terminal</span>
+          </div>
+        </div>
+        <div class="skill-cat reveal">
+          <p class="skill-cat-label">Concepts</p>
+          <div class="skill-pills">
+            <span class="pill">OOP</span><span class="pill">Data Structures</span><span class="pill">Algorithms</span>
+            <span class="pill">Memory Mgmt</span><span class="pill">File I/O</span><span class="pill">Recursion</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS
+       Add category: copy .proj-category block
+       Add card: copy .proj-card inside any .proj-grid
+       Replace GITHUB_LINK_HERE with real URL
+       Delete .demo-btn if no live demo
+  -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-eyebrow reveal">Projects</p>
+      <h2 class="section-title reveal">Things I've <em>built</em>.</h2>
+      <p class="section-sub reveal">Experiments, systems, and tools — made to understand, not just to ship.</p>
+      <div style="height:56px"></div>
+
+      <!-- Systems Projects -->
+      <div class="proj-category reveal">
+        <div class="cat-header">
+          <span class="cat-title">Systems Projects</span>
+          <span class="cat-count">3 projects</span>
+        </div>
+        <div class="proj-grid">
+          <div class="proj-card">
+            <h3>Bank Management System</h3>
+            <p>C++ simulation of banking operations including account creation, deposits, withdrawals, and balance tracking using OOP principles.</p>
+            <div class="proj-tags"><span>C++</span><span>OOP</span><span>File I/O</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+          <div class="proj-card">
+            <h3>Student Record System</h3>
+            <p>C++ application for managing student data — add, search, update, and delete records stored persistently with file-based I/O.</p>
+            <div class="proj-tags"><span>C++</span><span>File I/O</span><span>Data Structures</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+          <div class="proj-card">
+            <h3>Library Management System</h3>
+            <p>Full-featured library system with book tracking, member management, and borrow/return workflows using linked lists and structs.</p>
+            <div class="proj-tags"><span>C++</span><span>Linked Lists</span><span>OOP</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experiments -->
+      <div class="proj-category reveal">
+        <div class="cat-header">
+          <span class="cat-title">Experiments</span>
+          <span class="cat-count">2 projects</span>
+        </div>
+        <div class="proj-grid">
+          <div class="proj-card">
+            <h3>Sorting Algorithm Visualizer</h3>
+            <p>Python experiment comparing bubble, merge, and quicksort. Logs comparisons and swaps to study time complexity in practice.</p>
+            <div class="proj-tags"><span>Python</span><span>Algorithms</span><span>Analysis</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+          <div class="proj-card">
+            <h3>Memory Allocator Sim</h3>
+            <p>Simulates heap memory allocation strategies (first-fit, best-fit) in C to explore how malloc-like systems manage fragmentation.</p>
+            <div class="proj-tags"><span>C</span><span>Memory</span><span>Systems</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Web Tools -->
+      <div class="proj-category reveal">
+        <div class="cat-header">
+          <span class="cat-title">Web Tools</span>
+          <span class="cat-count">2 projects</span>
+        </div>
+        <div class="proj-grid">
+          <div class="proj-card">
+            <h3>Dev Notes App</h3>
+            <p>Minimal browser-based note-taking tool with Markdown support and local persistence. No backend required.</p>
+            <div class="proj-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+              <a href="#" class="demo-btn" target="_blank" rel="noopener">↗ Live Demo</a>
+            </div>
+          </div>
+          <div class="proj-card">
+            <h3>Portfolio Website</h3>
+            <p>This very website — hand-coded with pure HTML, CSS, and vanilla JS. Modular, well-commented, beginner-friendly to extend.</p>
+            <div class="proj-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Programming Projects -->
+      <div class="proj-category reveal">
+        <div class="cat-header">
+          <span class="cat-title">Programming Projects</span>
+          <span class="cat-count">2 projects</span>
+        </div>
+        <div class="proj-grid">
+          <div class="proj-card">
+            <h3>CLI Calculator</h3>
+            <p>Terminal calculator in Python supporting BODMAS, parentheses, and history logging. Built to practise expression parsing from scratch.</p>
+            <div class="proj-tags"><span>Python</span><span>CLI</span><span>Parsing</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+          <div class="proj-card">
+            <h3>Number Guessing Game</h3>
+            <p>Classic guessing game with difficulty levels and attempt tracking — first project to explore loops, conditionals, and user input in C++.</p>
+            <div class="proj-tags"><span>C++</span><span>Beginner</span><span>Logic</span></div>
+            <div class="card-btns">
+              <a href="https://github.com/IbraheemChand" class="gh-btn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                View Repo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEARNING — copy .learn-item to add more -->
+  <section id="learning">
+    <div class="container">
+      <p class="section-eyebrow reveal">Currently Learning</p>
+      <h2 class="section-title reveal">What's <em>next</em> on the list.</h2>
+      <p class="section-sub reveal">Technologies and concepts I'm actively exploring right now.</p>
+      <div class="learn-grid">
+        <div class="learn-item reveal">
+          <div class="learn-dot"></div>
+          <div class="learn-info"><h4>Operating Systems</h4><p>Processes, scheduling, memory paging</p></div>
+        </div>
+        <div class="learn-item reveal">
+          <div class="learn-dot"></div>
+          <div class="learn-info"><h4>Computer Networks</h4><p>TCP/IP stack, sockets, protocols</p></div>
+        </div>
+        <div class="learn-item reveal">
+          <div class="learn-dot"></div>
+          <div class="learn-info"><h4>Advanced Data Structures</h4><p>Trees, graphs, hash tables</p></div>
+        </div>
+        <div class="learn-item reveal">
+          <div class="learn-dot"></div>
+          <div class="learn-info"><h4>Linux Internals</h4><p>Kernel concepts, system calls, shell</p></div>
+        </div>
+        <div class="learn-item reveal">
+          <div class="learn-dot"></div>
+          <div class="learn-info"><h4>SQL &amp; Databases</h4><p>Relational models, queries, indexing</p></div>
+        </div>
+        <div class="learn-item reveal">
+          <div class="learn-dot"></div>
+          <div class="learn-info"><h4>Compiler Basics</h4><p>Lexers, parsers, abstract syntax trees</p></div>
+        </div>
+
+         <div class="learn-item reveal">
+          <div class="learn-dot"></div>
+          <div class="learn-info"><h4>System Administration </h4><p>Lexers, parsers, abstract syntax trees</p></div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- GITHUB -->
+  <section id="github">
+    <div class="container">
+      <div class="gh-banner reveal">
+        <h2>See everything on GitHub</h2>
+        <p>All source code, experiments, and work-in-progress live here.</p>
+        <a href="https://github.com/IbraheemChand" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          github.com/IbraheemChand
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT — copy .c-link to add more channels -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-wrap">
+        <div class="reveal">
+          <p class="section-eyebrow">Contact</p>
+          <h2 class="section-title">Let's <em>connect</em>.</h2>
+          <p class="section-sub">Open to internship opportunities, collaborations, or just a conversation about code and systems.</p>
+        </div>
+        <div class="contact-links reveal">
+          <a href="mailto:chibraheemchand@gmail.com" class="c-link">
+            <div class="c-icon">✉️</div>
+            <div class="c-info"><span>Email</span><strong>chibraheemchand@gmail.com</strong></div>
+          </a>
+          <a href="https://github.com/IbraheemChand" target="_blank" rel="noopener" class="c-link">
+            <div class="c-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1a1a1a"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </div>
+            <div class="c-info"><span>GitHub</span><strong>github.com/IbraheemChand</strong></div>
+          </a>
+          <a href="https://www.linkedin.com/in/ibraheem-chand-345978255/" target="_blank" rel="noopener" class="c-link">
+            <div class="c-icon">💼</div>
+            <div class="c-info"><span>LinkedIn</span><strong>linkedin.com/in/ibraheem-chand</strong></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot-inner">
+        <p class="foot-copy">Built by <span>Ibraheem Chand</span> — hand-coded, no frameworks.</p>
+        <a href="#hero" class="foot-top">↑ Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
