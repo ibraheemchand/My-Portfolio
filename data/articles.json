@@ -1,0 +1,128 @@
+[
+  {
+    "id": "openwrt-ptcl-failed",
+    "slug": "openwrt-ptcl-failed",
+    "title": "Why Installing OpenWrt on My PTCL ZTE H108N Failed - And What I Learned",
+    "description": "A first-hand account of attempting to unlock an ISP modem and turn it into a DIY NAS - trying 5 different methods and what each failure taught me.",
+    "date": "2026-04-20",
+    "readingTime": 13,
+    "featured": true,
+    "tags": ["OpenWrt", "Networking", "Firmware", "Hardware", "DIY", "Troubleshooting"],
+    "thumbnail": "/images/articles/openwrt-failed-thumb.jpg",
+    "sections": {
+      "problem": "I wanted to turn my PTCL ZTE H108N modem into a DIY NAS for IP camera backup. The modem is always on, has a USB port, and theoretically supports file sharing - perfect for a $0 solution. The problem: PTCL locked down the firmware, hiding NAS features like FTP and SMB behind a disabled interface.",
+      "error": "All 5 methods I tried completely failed: Telnet unlock commands didn't work, alternative command variations were rejected, Tomato firmware wasn't supported, DD-WRT had no matching build, and OpenWrt's old brcm63xx build was too outdated. The modem's NAS features remained inaccessible.",
+      "rootCause": "ISP firmware customization. PTCL heavily modifies the boot process, changes command structures, and removes unlock access. Third-party firmware (Tomato, DD-WRT) only support tested devices - my ISP variant wasn't tested. Generic unlock tools won't work on custom ISP firmware because the exact commands vary by implementation.",
+      "solution": "I learned to accept limitations. The best paths forward are: finding pre-flashed stock ZTE firmware (nearly impossible), using laptop's native NAS features (less ideal), buying a cheap NAS device when budget allows, or potentially finding documentation of similar ISP modems. Hardware modification via UART serial access exists but requires specialized tools and risks permanent damage.",
+      "keyTakeaway": "Hardware capability ≠ software support. Just because your modem has a Broadcom chipset doesn't mean third-party firmware will work. ISPs lock devices intentionally, and unlocking requires the right knowledge, right tools, right documentation, or luck. Sometimes the best solution is knowing when to stop and choosing the $50 solution over the $0 failed attempt."
+    }
+  },
+  {
+    "id": "understanding-pointers",
+    "slug": "understanding-pointers",
+    "title": "Understanding C++ Pointers: Memory Address to Dereferencing",
+    "description": "A deep dive into how C++ pointers work, common pitfalls, and practical examples.",
+    "date": "2024-02-15",
+    "readingTime": 8,
+    "featured": true,
+    "tags": ["C++", "Memory Management", "Pointers"],
+    "thumbnail": "/images/articles/pointers-thumb.jpg",
+    "sections": {
+      "problem": "While learning data structures, I kept getting segmentation faults when working with dynamic arrays. I didn't truly understand what pointers were doing under the hood.",
+      "error": "Segmentation fault (core dumped) when accessing pointer values after deallocation",
+      "rootCause": "I was using pointers without understanding memory layout. I'd frequently delete memory and then try to access it again, causing the segfault.",
+      "solution": "I created a visual debugger project to understand pointer behavior. Used GDB to step through memory allocations and deallocations. Learned stack vs heap distinction.",
+      "keyTakeaway": "Pointers are just variables that store memory addresses. Understanding stack vs heap is crucial. Always check if memory is still valid before dereferencing."
+    }
+  },
+  {
+    "id": "sorting-complexity",
+    "slug": "sorting-complexity",
+    "title": "Sorting Algorithm Complexity: Theory vs Practice",
+    "description": "Analyzing bubble sort, merge sort, and quicksort with real timing data.",
+    "date": "2024-02-10",
+    "readingTime": 10,
+    "featured": true,
+    "tags": ["Algorithms", "Python", "Performance"],
+    "thumbnail": "/images/articles/sorting-thumb.jpg",
+    "sections": {
+      "problem": "I knew Big O notation but couldn't predict which algorithm would be fastest for different dataset sizes.",
+      "error": "Quicksort was slower than bubble sort on my small test cases",
+      "rootCause": "Quicksort has overhead for partition logic. On small datasets (< 100 elements), bubble sort's simplicity wins. I didn't account for constant factors in Big O.",
+      "solution": "Built a sorting visualizer in Python that tested all three algorithms on datasets from 10 to 10,000 elements. Plotted time vs dataset size.",
+      "keyTakeaway": "Big O notation describes growth rate, not absolute speed. Constant factors matter for small inputs. Hybrid sorts (like Timsort) combine multiple algorithms for real-world efficiency."
+    }
+  },
+  {
+    "id": "linux-file-permissions",
+    "slug": "linux-file-permissions",
+    "title": "Linux File Permissions Demystified: rwx Meaning",
+    "description": "Breaking down ls output, chmod, umask, and why 755 seems magical.",
+    "date": "2024-01-28",
+    "readingTime": 6,
+    "featured": true,
+    "tags": ["Linux", "Systems", "CLI"],
+    "thumbnail": "/images/articles/linux-thumb.jpg",
+    "sections": {
+      "problem": "Confused by Linux file permissions. Didn't know the difference between 755 and 644. Scripts wouldn't execute.",
+      "error": "Permission denied when trying to run ./script.sh",
+      "rootCause": "The file didn't have execute permission (x bit) for the owner. I didn't understand that rwx are three separate bits.",
+      "solution": "Learned that permissions are octal: r=4, w=2, x=1. Owner/Group/Others are three digits. Used chmod 755 to give execute permission.",
+      "keyTakeaway": "rwx = 111 (binary) = 7 (octal). Each digit is for owner/group/others. Always think in binary first, then convert to octal."
+    }
+  },
+  {
+    "id": "git-internals",
+    "slug": "git-internals",
+    "title": "Git Internals: How .git Objects Store Your Code",
+    "description": "Exploring the .git folder structure and understanding commits as DAGs.",
+    "date": "2024-01-15",
+    "readingTime": 12,
+    "featured": false,
+    "tags": ["Git", "Version Control", "Systems"],
+    "thumbnail": "/images/articles/git-thumb.jpg",
+    "sections": {
+      "problem": "Using Git mechanically without understanding how commits actually work or what's in the .git folder.",
+      "error": "Accidentally corrupted local repo and couldn't figure out how to recover",
+      "rootCause": "Didn't understand that commits are hashed DAGs (Directed Acyclic Graphs). Thought commits were linear.",
+      "solution": "Used git cat-file to inspect objects. Explored .git/objects/ structure. Realized every commit is a SHA-1 hash of its content.",
+      "keyTakeaway": "Git stores commits as a content-addressable graph. Each commit contains parent reference(s), allowing branching. The hash IS the content security."
+    }
+  },
+  {
+    "id": "memory-allocator",
+    "slug": "memory-allocator",
+    "title": "Building a Custom Memory Allocator: First-Fit vs Best-Fit",
+    "description": "Creating a malloc-like system to understand heap fragmentation.",
+    "date": "2024-01-05",
+    "readingTime": 15,
+    "featured": false,
+    "tags": ["C", "Memory Management", "Systems"],
+    "thumbnail": "/images/articles/malloc-thumb.jpg",
+    "sections": {
+      "problem": "I wanted to understand how malloc() actually works under the hood. Why does it sometimes fail to allocate despite having free memory?",
+      "error": "malloc() returns NULL intermittently on systems with fragmented memory",
+      "rootCause": "Fragmentation: memory is split into small chunks. First-fit finds first available block, potentially wasting space. Best-fit searches for best match but is slower.",
+      "solution": "Implemented both strategies in C. Measured fragmentation rates. Visualized free list state before/after allocations.",
+      "keyTakeaway": "Allocators face a trade-off: speed vs fragmentation. Real allocators (jemalloc, etc) use hybrid strategies. Fragmentation is a real problem in long-lived systems."
+    }
+  },
+  {
+    "id": "sfml-game-loop",
+    "slug": "sfml-game-loop",
+    "title": "Game Loop Design: Handling Fixed Timestep and Frame Rate",
+    "description": "Why frame-independent physics matter in game development.",
+    "date": "2023-12-20",
+    "readingTime": 9,
+    "featured": false,
+    "tags": ["C++", "GameDev", "SFML"],
+    "thumbnail": "/images/articles/gameloop-thumb.jpg",
+    "sections": {
+      "problem": "My SFML game ran at different speeds on different machines due to variable frame rates.",
+      "error": "Player moves 2x farther on a 120 Hz monitor than a 60 Hz monitor",
+      "rootCause": "I was multiplying velocity by frame count, not delta time. Frame rate shouldn't affect physics.",
+      "solution": "Implemented fixed timestep: separate physics update rate from render rate using dt (delta time).",
+      "keyTakeaway": "Always multiply by delta time. Frame rate is rendering; physics should be independent. Use fixed timestep for deterministic behavior."
+    }
+  }
+]

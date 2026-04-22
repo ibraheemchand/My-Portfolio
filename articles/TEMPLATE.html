@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>[ARTICLE TITLE] - Ibraheem Chand</title>
+  <meta name="description" content="[SHORT DESCRIPTION - max 160 chars]">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #ffffff;
+      --surface:   #f7f7f9;
+      --border:    #ebebeb;
+      --accent:    #5b4ef5;
+      --accent2:   #2ec4b6;
+      --text:      #1a1a1a;
+      --muted:     #888;
+      --light:     #e8e5ff;
+      --font-head: 'Bricolage Grotesque', sans-serif;
+      --font-body: 'Lora', serif;
+      --radius:    12px;
+      --t:         0.22s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 24px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: all var(--t);
+      background: rgba(255,255,255,0.93);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-head); font-weight: 800; font-size: 22px;
+      letter-spacing: -1px; color: var(--text);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-head); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+      transition: color var(--t);
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(16px);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-nav.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .mobile-nav a {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--text);
+      transition: color var(--t);
+    }
+
+    #article-header {
+      padding-top: 160px;
+      padding-bottom: 60px;
+    }
+    .article-title {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .article-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-family: var(--font-head);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .article-date, .reading-time {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .article-date span, .reading-time span {
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .article-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .article-tag {
+      font-family: var(--font-head);
+      font-size: 11px;
+      padding: 4px 10px;
+      background: var(--light);
+      color: var(--accent);
+      border-radius: 100px;
+      font-weight: 600;
+    }
+
+    #article-content {
+      padding: 60px 0;
+    }
+    .article-section {
+      margin-bottom: 56px;
+    }
+    .article-section h2 {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .article-section h2 .emoji {
+      font-size: 32px;
+    }
+    .article-section p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 16px;
+    }
+    .article-section h3 {
+      font-family: var(--font-head);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .article-section ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+    }
+    .article-section li {
+      margin-bottom: 8px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+    .code-block code {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    pre {
+      margin: 0;
+    }
+
+    .article-image {
+      width: 100%;
+      max-width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin: 32px 0;
+    }
+    .image-caption {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      border-radius: 4px;
+      margin: 24px 0;
+    }
+    .callout.warning {
+      background: #fff3cd;
+      border-left-color: #ffc107;
+    }
+    .callout p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    #article-footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+      margin-top: 60px;
+    }
+    .article-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      transition: gap var(--t);
+    }
+    .back-link:hover {
+      gap: 10px;
+    }
+    .related-articles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .related-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all var(--t);
+      text-decoration: none;
+    }
+    .related-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+    .related-card h4 {
+      font-family: var(--font-head);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .related-card p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      margin-top: 60px;
+    }
+    .foot-inner { display: flex; justify-content: space-between; align-items: center; }
+    .foot-copy { font-family: var(--font-head); font-size: 13px; color: var(--muted); }
+    .foot-copy span { color: var(--accent); font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 24px; }
+      nav { padding: 18px 24px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .mobile-nav { display: flex; }
+      .article-title { font-size: clamp(24px, 6vw, 40px); }
+      .article-meta-row { font-size: 12px; }
+      #article-header { padding-top: 120px; padding-bottom: 40px; }
+      #article-content { padding: 40px 0; }
+      .article-section h2 { font-size: 24px; }
+      .back-link { font-size: 12px; }
+      .foot-inner { flex-direction: column; gap: 10px; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0 20px; }
+      nav { padding: 16px 20px; }
+      .article-title { font-size: 24px; }
+      #article-header { padding-top: 100px; padding-bottom: 32px; }
+      .article-meta-row { gap: 12px; flex-direction: column; }
+      .article-section h2 { font-size: 20px; }
+      .article-section h3 { font-size: 16px; }
+      .related-articles { grid-template-columns: 1fr; }
+      .mobile-nav a { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="../index.html" class="mobile-link">Home</a>
+    <a href="../index.html#projects" class="mobile-link">Projects</a>
+    <a href="../index.html#skills" class="mobile-link">Skills</a>
+    <a href="../articles.html" class="mobile-link">Articles</a>
+    <a href="../index.html#about" class="mobile-link">About</a>
+  </div>
+
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">I<span>.</span>C</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../articles.html">Articles</a></li>
+      <li><a href="../index.html#about">About</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section id="article-header">
+    <div class="container">
+      <h1 class="article-title">[ARTICLE TITLE]</h1>
+      
+      <div class="article-meta-row">
+        <div class="article-date">
+          <span>[DATE: e.g., Feb 20, 2024]</span>
+        </div>
+        <div class="reading-time">
+          <span>[N] min read</span>
+        </div>
+      </div>
+
+      <div class="article-tags-row">
+        <span class="article-tag">[TAG 1]</span>
+        <span class="article-tag">[TAG 2]</span>
+        <span class="article-tag">[TAG 3]</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="article-content">
+    <div class="container">
+      
+      <!-- PROBLEM SECTION -->
+      <div class="article-section">
+        <h2><span class="emoji">🧠</span> Problem</h2>
+        <p>Describe the problem or challenge you faced. What were you trying to accomplish? Why did you care?</p>
+        <p>Add context. Make it relatable. Show why this matters.</p>
+      </div>
+
+      <!-- ERROR/BUG SECTION -->
+      <div class="article-section">
+        <h2><span class="emoji">⚠️</span> Error / Bug</h2>
+        <p>What was the error or unexpected behavior?</p>
+        
+        <div class="code-block">
+          <pre><code>Error message here
+Stack trace or output here</code></pre>
+        </div>
+
+        <p>Additional context about the error.</p>
+      </div>
+
+      <!-- ROOT CAUSE SECTION -->
+      <div class="article-section">
+        <h2><span class="emoji">🔍</span> Root Cause</h2>
+        <p>Why did this happen? Explain the underlying issue.</p>
+
+        <h3>Sub-point 1</h3>
+        <p>Explanation of cause factor 1.</p>
+        
+        <div class="callout">
+          <p><strong>Key insight:</strong> Important realization about the root cause</p>
+        </div>
+
+        <h3>Sub-point 2</h3>
+        <ul>
+          <li>Reason or factor 1</li>
+          <li>Reason or factor 2</li>
+          <li>Reason or factor 3</li>
+        </ul>
+      </div>
+
+      <!-- SOLUTION SECTION -->
+      <div class="article-section">
+        <h2><span class="emoji">🛠️</span> Solution</h2>
+        <p>How did you solve it? What steps did you take?</p>
+
+        <h3>Approach</h3>
+        <p>Describe your debugging/problem-solving approach.</p>
+
+        <div class="code-block">
+          <pre><code class="language-python">
+# Your solution code here
+def my_function():
+    return "solution"
+          </code></pre>
+        </div>
+
+        <h3>Tools / Techniques Used</h3>
+        <ul>
+          <li>Tool or technique 1: Brief explanation</li>
+          <li>Tool or technique 2: Brief explanation</li>
+          <li>Tool or technique 3: Brief explanation</li>
+        </ul>
+      </div>
+
+      <!-- KEY TAKEAWAY SECTION -->
+      <div class="article-section">
+        <h2><span class="emoji">💡</span> Key Takeaway</h2>
+        
+        <div class="callout">
+          <p><strong>Main lesson:</strong> The one thing readers should remember from this article</p>
+        </div>
+
+        <h3>Best Practices / Lessons Learned</h3>
+        <ul>
+          <li>Lesson 1 with context</li>
+          <li>Lesson 2 with reasoning</li>
+          <li>Lesson 3 to avoid this in future</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="article-footer">
+    <div class="container">
+      <div class="article-nav">
+        <a href="../articles.html" class="back-link">← Back to articles</a>
+      </div>
+
+      <div style="margin-bottom: 40px;">
+        <p style="font-family: var(--font-head); color: var(--muted); font-size: 12px; margin-bottom: 12px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.08em;">Share this article</p>
+        <div style="display: flex; gap: 12px;">
+          <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; transition: all var(--t); text-decoration: none;">
+            <span style="font-size: 18px;">𝕏</span>
+          </a>
+          <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; transition: all var(--t); text-decoration: none;">
+            <span style="font-size: 18px;">in</span>
+          </a>
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 40px 0;">
+
+      <div>
+        <p style="font-family: var(--font-head); color: var(--text); font-size: 14px; font-weight: 700; margin-bottom: 16px;">More Articles</p>
+        <div class="related-articles">
+          <a href="[article-slug-1].html" class="related-card">
+            <h4>[Related Article Title 1]</h4>
+            <p>[Short description]</p>
+          </a>
+          <a href="[article-slug-2].html" class="related-card">
+            <h4>[Related Article Title 2]</h4>
+            <p>[Short description]</p>
+          </a>
+          <a href="[article-slug-3].html" class="related-card">
+            <h4>[Related Article Title 3]</h4>
+            <p>[Short description]</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot-inner">
+        <p class="foot-copy">Built by <span>Ibraheem Chand</span> — hand-coded, no frameworks.</p>
+        <a href="../index.html" style="color: var(--muted); transition: color var(--t);">← Back to home</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open');
+      document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+
+</body>
+</html>

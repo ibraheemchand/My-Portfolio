@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Installing OpenWrt on My PTCL ZTE H108N Failed - And What I Learned</title>
+    <meta name="description" content="A first-hand account of attempting to unlock an ISP modem and turn it into a DIY NAS - trying 5 different methods and what each failure taught me about firmware customization and hardware limitations.">
+    <meta name="keywords" content="OpenWrt, Firmware, Modem, NAS, DIY, Hardware, Networking, PTCL, ZTE">
+    
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="Why Installing OpenWrt on My PTCL ZTE H108N Failed - And What I Learned">
+    <meta property="og:description" content="5 failed methods to unlock an ISP modem. What I learned about firmware customization and the limits of DIY solutions.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="/images/articles/openwrt-failed-og.jpg">
+    <meta property="article:published_time" content="2026-04-20">
+    <meta property="article:author" content="Portfolio Owner">
+    <meta property="article:tag" content="OpenWrt, Networking, Firmware">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --accent: #5b4ef5;
+            --accent2: #2ec4b6;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --bg: #f8f9fa;
+            --border: #dee2e6;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            line-height: 1.7;
+            color: var(--text);
+            background-color: var(--bg);
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--white);
+            padding: 1.2rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav > div {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.22s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Article Header */
+        .article-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .article-header h1 {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: background-color 0.22s ease;
+        }
+
+        .tag:hover {
+            background-color: var(--accent2);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            font-family: 'Bricolage Grotesque', sans-serif;
+        }
+
+        .emoji {
+            font-size: 1.8rem;
+        }
+
+        .section h3 {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .section ul, .section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .section a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.22s ease;
+        }
+
+        .section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background-color: #2d3436;
+            color: #dfe6e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--accent);
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Callout Box */
+        .callout {
+            background-color: #f0f4ff;
+            border-left: 4px solid var(--accent);
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .callout p {
+            margin: 0;
+            color: var(--text);
+        }
+
+        .callout strong {
+            color: var(--accent);
+        }
+
+        /* List Styles */
+        .method-list {
+            margin: 1.5rem 0;
+        }
+
+        .method-item {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .method-item h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-family: 'Bricolage Grotesque', sans-serif;
+        }
+
+        .success {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .failure {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        /* Footer & Navigation */
+        .article-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .back-link, .back-home {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.22s ease;
+        }
+
+        .back-link:hover, .back-home:hover {
+            color: var(--accent2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .article-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            nav .nav-links {
+                gap: 1rem;
+            }
+
+            nav a {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .article-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .emoji {
+                font-size: 1.4rem;
+            }
+
+            .code-block {
+                padding: 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div>
+            <a href="../index.html" style="font-size: 1.1rem; font-weight: 700; letter-spacing: 1px;">← Back Home</a>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../articles.html">All Articles</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Article Header -->
+        <div class="article-header">
+            <h1>Why Installing OpenWrt on My PTCL ZTE H108N Failed - And What I Learned</h1>
+            <div class="article-meta">
+                <span>📅 April 20, 2026</span>
+                <span>⏱️ 13 min read</span>
+                <span>✍️ Hardware DIY</span>
+            </div>
+            <div class="article-tags">
+                <a href="../articles.html" class="tag">OpenWrt</a>
+                <a href="../articles.html" class="tag">Networking</a>
+                <a href="../articles.html" class="tag">Firmware</a>
+                <a href="../articles.html" class="tag">Hardware</a>
+                <a href="../articles.html" class="tag">DIY</a>
+                <a href="../articles.html" class="tag">Troubleshooting</a>
+            </div>
+        </div>
+
+        <!-- Problem Section -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🧠</span>
+                <span>The Goal: A DIY NAS</span>
+            </div>
+            <p>I own an IP camera that streams 24/7. Every night, it needs to back up recorded footage somewhere safe, but I didn't want to:</p>
+            <ul>
+                <li>Keep my laptop running all night (waste of electricity)</li>
+                <li>Buy a Raspberry Pi 3 (too expensive, overkill)</li>
+                <li>Pay for cloud storage (recurring costs)</li>
+            </ul>
+            <p>My idea? <strong>Turn my PTCL ZTE ZXHN H108N modem into a NAS box.</strong> The modem is always on anyway, has a USB port, and theoretically supports file sharing. Perfect, right?</p>
+            <p style="font-style: italic; color: var(--text-light);">Spoiler: It wasn't.</p>
+
+            <h3>The Root Problem: PTCL Locked Down Everything</h3>
+            <p>My modem came with stock PTCL firmware that deliberately <strong>hides NAS features</strong> (FTP, SMB, DLNA) behind a locked interface. PTCL does this to maintain control and prevent customers from using unapproved hardware or configurations.</p>
+            <p>The features are physically built into the modem. They're just... hidden.</p>
+
+            <h3>My Hardware: BCM63381B0 Broadcom Chipset</h3>
+            <p>My modem has:</p>
+            <ul>
+                <li><strong>CPU:</strong> BCM63381B0 (Broadcom)</li>
+                <li><strong>RAM:</strong> 64MB</li>
+                <li><strong>Flash:</strong> 8MB</li>
+                <li><strong>USB:</strong> USB 2.0 (one port)</li>
+                <li><strong>Network:</strong> 4x Ethernet, WiFi 802.11b/g/n</li>
+            </ul>
+            <p>This is a decade-old piece of hardware, but still plenty capable for NAS work.</p>
+        </div>
+
+        <!-- Error Section -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">⚠️</span>
+                <span>The Methods I Tried (And Failed)</span>
+            </div>
+            <p>I was offered 5-6 different approaches. Here's what happened with each.</p>
+
+            <div class="method-list">
+                <div class="method-item">
+                    <h4>Method 1: Telnet Unlock (The "Quick Fix")</h4>
+                    <p><strong>What it promised:</strong> 30 minutes to unlock, non-destructive, temporary but functional</p>
+                    
+                    <p><strong>What I did:</strong></p>
+                    <div class="code-block">
+                        <pre>git clone https://github.com/douniwan5788/zte_modem_tools
+cd zte_modem_tools
+pip install -r requirements.txt
+python3 zte_factroymode.py --user admin --pass admin --ip 192.168.1.1 telnet open</pre>
+                    </div>
+                    <p>I got telnet credentials. Success! I could SSH in. But then...</p>
+                    <div class="code-block">
+                        <pre>telnet 192.168.1.1
+# Successfully logged in
+upgradetest sdefconf 198
+# Result: Command not recognized / No output / Did nothing</pre>
+                    </div>
+                    <p><span class="failure">❌ Failed:</span> The command either didn't exist, or PTCL's firmware variant doesn't respond to it. The modem didn't reboot, and the admin panel didn't unlock.</p>
+                    <p><strong>Why:</strong> PTCL uses a heavily modified firmware. The unlock command is known to work on standard ZTE firmware, but PTCL's custom build doesn't support it. The exact commands vary by firmware version.</p>
+                </div>
+
+                <div class="method-item">
+                    <h4>Method 2: Alternative Telnet Commands</h4>
+                    <p><strong>What I tried:</strong> Variations and alternative commands</p>
+                    <div class="code-block">
+                        <pre>sdefconf 198          # Didn't work
+setmac upgradetest    # Didn't work
+upgradetest           # Didn't work
+setmac 4 198          # Didn't work</pre>
+                    </div>
+                    <p>I even tried direct URLs in the browser:</p>
+                    <div class="code-block">
+                        <pre>http://192.168.1.1/admin/ftp.html
+http://192.168.1.1/admin/samba.html
+http://192.168.1.1/cgi-bin/webproc?getpage=/admin/ftp.html</pre>
+                    </div>
+                    <p><span class="failure">❌ Failed:</span> None of them worked. The URLs redirected to the main page or showed 404.</p>
+                    <p><strong>Lesson:</strong> There's no magic backdoor. If the ISP locks something, it's locked. Random commands won't fix it.</p>
+                </div>
+
+                <div class="method-item">
+                    <h4>Method 3: Fresh Tomato Firmware Flash</h4>
+                    <p><strong>What it promised:</strong> Full Broadcom support, user-friendly interface, built-in SMB/NAS</p>
+                    <p><strong>What I found:</strong> I discovered Tomato is great for Broadcom routers, but checks the device list:</p>
+                    <ul>
+                        <li>Official Fresh Tomato device list: <span class="failure">Not supported</span></li>
+                        <li>Tomato by Shibby (older fork): <span class="failure">Not supported</span></li>
+                        <li>Advanced Tomato: <span class="failure">Not supported</span></li>
+                    </ul>
+                    <p><span class="failure">❌ Failed:</span> Tomato only supports specific consumer router models. My PTCL ZTE modem wasn't on any list.</p>
+                    <p><strong>Why:</strong> Tomato developers need physical hardware to test. A obscure PTCL-customized ZTE modem isn't worth the effort. The device list is surprisingly short.</p>
+                </div>
+
+                <div class="method-item">
+                    <h4>Method 4: DD-WRT (The "Most Compatible" Option)</h4>
+                    <p><strong>What it promised:</strong> Widest router support, full NAS/SMB, large community</p>
+                    <p><strong>What I found:</strong> Searched DD-WRT's database at <code>dd-wrt.com</code> for:</p>
+                    <ul>
+                        <li>"ZTE ZXHN H108N" → No match</li>
+                        <li>"ZTE H108N" → No match</li>
+                        <li>"BCM63381" → No match</li>
+                        <li>"PTCL modem" → No match</li>
+                    </ul>
+                    <p><span class="failure">❌ Failed:</span> Even the widest-support firmware doesn't cover ISP-customized modems. Found forum posts from other PTCL users with the same issue.</p>
+                    <p><strong>Why:</strong> DD-WRT needs someone with your device to test. ISP variants are less popular, so fewer people test them.</p>
+                </div>
+
+                <div class="method-item">
+                    <h4>Method 5: Generic OpenWrt brcm63xx Build</h4>
+                    <p><strong>What it promised:</strong> Most flexible open-source firmware, broadest support, community-driven</p>
+                    <p><strong>What I considered:</strong> The oldest officially supported OpenWrt for brcm63xx: v15.05.1 (from 2016)</p>
+                    <div class="code-block">
+                        <pre>openwrt-15.05.1-brcm63xx-generic-96328avng-8M-flash-generic-squashfs-cfe.bin</pre>
+                    </div>
+                    <p><span class="failure">❌ Didn't Flash (Would Have Failed):</span> I was warned multiple times:</p>
+                    <ul>
+                        <li>10 years old → Security vulnerabilities</li>
+                        <li>USB support → "Everything working except USB port" on similar devices</li>
+                        <li>8M flash → Tight fit for Samba + dependencies</li>
+                        <li>No community proof → No one documented this device working</li>
+                    </ul>
+                    <p><strong>Why this would fail:</strong> Old firmware is obsolete and insecure. Effort to make it work isn't worth the risk.</p>
+                </div>
+            </div>
+
+            <div class="callout">
+                <p><strong>5 different approaches. 0 successes.</strong> Each method failed for a different reason, but they all pointed to the same core problem: ISP firmware customization makes generic solutions incompatible.</p>
+            </div>
+        </div>
+
+        <!-- Root Cause Section -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🔍</span>
+                <span>The Root Cause: ISP Customization vs. Hardware Reality</span>
+            </div>
+
+            <h3>PTCL's Firmware is Heavily Customized</h3>
+            <p>Standard ZTE firmware would let me unlock features. But PTCL:</p>
+            <ul>
+                <li>Modifies the boot process</li>
+                <li>Changes command structures</li>
+                <li>Removes factory mode access</li>
+                <li>Disables development features</li>
+            </ul>
+            <p>This makes my modem incompatible with:</p>
+            <ul>
+                <li>Generic unlock tools (they target standard ZTE, not PTCL variants)</li>
+                <li>Third-party firmware (they're not tested on PTCL variants)</li>
+                <li>Community fixes (too niche to document)</li>
+            </ul>
+
+            <h3>The Hardware vs. Software Mismatch</h3>
+            <p>My modem's <strong>hardware is capable:</strong></p>
+            <ul>
+                <li>✅ BCM63381B0 processor (Broadcom)</li>
+                <li>✅ 64MB RAM (enough for SMB)</li>
+                <li>✅ 8MB flash (enough with package removal)</li>
+                <li>✅ USB 2.0 port (functional)</li>
+            </ul>
+            <p>But the <strong>software is locked:</strong></p>
+            <ul>
+                <li>❌ PTCL firmware disables telnet-based unlocking</li>
+                <li>❌ Custom firmware variants aren't supported</li>
+                <li>❌ Third-party firmware was never tested on this model</li>
+            </ul>
+
+            <h3>Why ISP Customization Exists</h3>
+            <p>PTCL locks devices down because they need to:</p>
+            <ul>
+                <li>Control what runs on your connection</li>
+                <li>Prevent customer support issues</li>
+                <li>Protect their network infrastructure</li>
+                <li>Maintain legal compliance</li>
+            </ul>
+            <p>It's not malicious—it's business. But it's frustrating for tinkerers.</p>
+        </div>
+
+        <!-- Solution Section -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">🛠️</span>
+                <span>What Would Actually Work</span>
+            </div>
+
+            <h3>Option A: Find Pre-Flashed Stock Firmware (Non-PTCL)</h3>
+            <p>If I could find original ZTE firmware without PTCL modifications, I could:</p>
+            <ol>
+                <li>Flash the stock firmware</li>
+                <li>Use standard unlock methods</li>
+                <li>Enable FTP/SMB features</li>
+                <li>Have a working NAS</li>
+            </ol>
+            <p><strong>The problem:</strong> Finding this firmware is nearly impossible without ZTE support.</p>
+
+            <h3>Option B: Accept Limitations & Use Stock Features</h3>
+            <p>My PTCL firmware likely has SMB/FTP already built in. They're just disabled in the web UI. If I could unlock just the UI (or if PTCL had enabled it), I'd have my NAS instantly.</p>
+
+            <h3>Option C: Hardware Modification (UART Serial)</h3>
+            <p>I could:</p>
+            <ul>
+                <li>Open the modem case</li>
+                <li>Connect via UART serial port</li>
+                <li>Access the bootloader</li>
+                <li>Unlock from there</li>
+            </ul>
+            <p><strong>The cost:</strong> Specialized tools, soldering skills, deep technical knowledge, and risk of permanent damage. Not worth a $0 NAS.</p>
+
+            <h3>Option D: Buy Supported Hardware</h3>
+            <p>If I had bought any of these instead:</p>
+            <ul>
+                <li>ASUS RT-N66U (full Tomato/DD-WRT support)</li>
+                <li>Linksys WRT54GL (legendary support)</li>
+                <li>Any modern Netgear (partial support)</li>
+            </ul>
+            <p>I could have flashed firmware in 15 minutes.</p>
+
+            <h3>Option E: Continue Searching</h3>
+            <p>Maybe the unlock command exists, and it's just not documented. Maybe someone else solved this. Maybe I'll find it in 6 months. But at that point, the modem might be replaced with newer hardware anyway.</p>
+        </div>
+
+        <!-- Key Takeaway Section -->
+        <div class="section">
+            <div class="section-title">
+                <span class="emoji">💡</span>
+                <span>What I Actually Learned</span>
+            </div>
+
+            <h3>1. ISP-Customized Hardware is Hard to Modify</h3>
+            <p>When you get hardware from an ISP, they lock it down. It's intentional, comprehensive, and designed to resist modification.</p>
+
+            <h3>2. Community Support is Everything</h3>
+            <p>There are thousands of router models and dozens of firmware variants. The community only documents what people actually use. Rare combinations get abandoned.</p>
+
+            <h3>3. Hardware Capability ≠ Software Support</h3>
+            <p>Just because your modem has a Broadcom chip doesn't mean Tomato, DD-WRT, or OpenWrt will support it. The chipset is necessary but not sufficient.</p>
+
+            <h3>4. Old Hardware Gets Abandoned</h3>
+            <p>My ZTE H108N is from ~2013. It still works, but it's not worth developers' time. Newer hardware gets support; older hardware gets forgotten.</p>
+
+            <h3>5. There's No Perfect $0 Solution for Every Device</h3>
+            <p>Sometimes you need to spend money. Sometimes you need to accept limitations. Sometimes the $50 solution is better than the $0 failed attempt.</p>
+
+            <div class="callout">
+                <p><strong>The Core Lesson:</strong> Hardware is not destiny. Your processor might be powerful, but your software might be locked. Your device might be technically capable, but its customized variant might not be supported. Sometimes the best solution is knowing when to stop and choosing a different path.</p>
+            </div>
+
+            <h3>For Others Attempting This</h3>
+            <p>If you're trying to modify an ISP-customized modem:</p>
+            <ul>
+                <li>✅ <strong>Do:</strong> Check if others with your ISP + model have succeeded</li>
+                <li>✅ <strong>Do:</strong> Backup your current firmware first</li>
+                <li>✅ <strong>Do:</strong> Know that you might fail (and that's okay)</li>
+                <li>❌ <strong>Don't:</strong> Assume compatibility based on chipset alone</li>
+                <li>❌ <strong>Don't:</strong> Keep trying random commands after several failures</li>
+                <li>❌ <strong>Don't:</strong> Ignore warnings about unsupported devices</li>
+            </ul>
+
+            <h3>The Irony</h3>
+            <p>My modem <strong>definitely has</strong> the capability to be a NAS. The hardware is there. The firmware likely has the features. But the ISP's lockdown is comprehensive enough to prevent my specific approach from working.</p>
+
+            <h3>What's Next?</h3>
+            <p>I'm not done with the DIY NAS idea. I have options:</p>
+            <ol>
+                <li>Find the magic PTCL unlock command (maybe it exists, just undocumented)</li>
+                <li>Use my laptop's native NAS features (less ideal, but works)</li>
+                <li>Eventually buy a cheap NAS device (when budget allows)</li>
+                <li>Keep exploring OpenWrt for newer releases</li>
+            </ol>
+            <p>For now, I've learned that <strong>sometimes the best solution is knowing when to stop.</strong></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="article-footer">
+            <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.95rem;">
+                Tagged: OpenWrt • Networking • Firmware • Hardware • DIY • Troubleshooting
+            </p>
+            <div class="footer-links">
+                <a href="../articles.html" class="back-link">← View All Articles</a>
+                <a href="../index.html" class="back-home">← Back Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

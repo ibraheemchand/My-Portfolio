@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Understanding C++ Pointers - Ibraheem Chand</title>
+  <meta name="description" content="A deep dive into how C++ pointers work, common pitfalls, and practical examples.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+  <style>
+    /* ============================================
+       ROOT VARIABLES
+    ============================================ */
+    :root {
+      --bg:        #ffffff;
+      --surface:   #f7f7f9;
+      --border:    #ebebeb;
+      --accent:    #5b4ef5;
+      --accent2:   #2ec4b6;
+      --text:      #1a1a1a;
+      --muted:     #888;
+      --light:     #e8e5ff;
+      --font-head: 'Bricolage Grotesque', sans-serif;
+      --font-body: 'Lora', serif;
+      --radius:    12px;
+      --t:         0.22s ease;
+    }
+
+    /* ============================================
+       RESET & BASE
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+
+    /* ============================================
+       NAV
+    ============================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 24px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: all var(--t);
+      background: rgba(255,255,255,0.93);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-head); font-weight: 800; font-size: 22px;
+      letter-spacing: -1px; color: var(--text);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-head); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+      transition: color var(--t);
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(16px);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-nav.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .mobile-nav a {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--text);
+      transition: color var(--t);
+    }
+
+    /* ============================================
+       ARTICLE HEADER
+    ============================================ */
+    #article-header {
+      padding-top: 160px;
+      padding-bottom: 60px;
+    }
+    .article-title {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .article-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-family: var(--font-head);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .article-date, .reading-time {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .article-date span, .reading-time span {
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .article-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .article-tag {
+      font-family: var(--font-head);
+      font-size: 11px;
+      padding: 4px 10px;
+      background: var(--light);
+      color: var(--accent);
+      border-radius: 100px;
+      font-weight: 600;
+    }
+
+    /* ============================================
+       ARTICLE CONTENT
+    ============================================ */
+    #article-content {
+      padding: 60px 0;
+    }
+    .article-section {
+      margin-bottom: 56px;
+    }
+    .article-section h2 {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .article-section h2 .emoji {
+      font-size: 32px;
+    }
+    .article-section p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 16px;
+    }
+    .article-section h3 {
+      font-family: var(--font-head);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .article-section ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+    }
+    .article-section li {
+      margin-bottom: 8px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    /* ============================================
+       CODE BLOCK
+    ============================================ */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+    .code-block code {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    pre {
+      margin: 0;
+    }
+
+    /* ============================================
+       IMAGE
+    ============================================ */
+    .article-image {
+      width: 100%;
+      max-width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin: 32px 0;
+    }
+    .image-caption {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    /* ============================================
+       CALLOUT BOX
+    ============================================ */
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      border-radius: 4px;
+      margin: 24px 0;
+    }
+    .callout.warning {
+      background: #fff3cd;
+      border-left-color: #ffc107;
+    }
+    .callout p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    #article-footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+      margin-top: 60px;
+    }
+    .article-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      transition: gap var(--t);
+    }
+    .back-link:hover {
+      gap: 10px;
+    }
+    .related-articles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .related-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all var(--t);
+      text-decoration: none;
+    }
+    .related-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+    .related-card h4 {
+      font-family: var(--font-head);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .related-card p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      margin-top: 60px;
+    }
+    .foot-inner { display: flex; justify-content: space-between; align-items: center; }
+    .foot-copy { font-family: var(--font-head); font-size: 13px; color: var(--muted); }
+    .foot-copy span { color: var(--accent); font-weight: 600; }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 768px) {
+      .container { padding: 0 24px; }
+      nav { padding: 18px 24px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .mobile-nav { display: flex; }
+      .article-title { font-size: clamp(24px, 6vw, 40px); }
+      .article-meta-row { font-size: 12px; }
+      #article-header { padding-top: 120px; padding-bottom: 40px; }
+      #article-content { padding: 40px 0; }
+      .article-section h2 { font-size: 24px; }
+      .back-link { font-size: 12px; }
+      .foot-inner { flex-direction: column; gap: 10px; text-align: center; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0 20px; }
+      nav { padding: 16px 20px; }
+      .article-title { font-size: 24px; }
+      #article-header { padding-top: 100px; padding-bottom: 32px; }
+      .article-meta-row { gap: 12px; flex-direction: column; }
+      .article-section h2 { font-size: 20px; }
+      .article-section h3 { font-size: 16px; }
+      .related-articles { grid-template-columns: 1fr; }
+      .mobile-nav a { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile nav drawer -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="../index.html" class="mobile-link">Home</a>
+    <a href="../index.html#projects" class="mobile-link">Projects</a>
+    <a href="../index.html#skills" class="mobile-link">Skills</a>
+    <a href="../articles.html" class="mobile-link">Articles</a>
+    <a href="../index.html#about" class="mobile-link">About</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">I<span>.</span>C</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../articles.html">Articles</a></li>
+      <li><a href="../index.html#about">About</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ARTICLE HEADER -->
+  <section id="article-header">
+    <div class="container">
+      <h1 class="article-title">Understanding C++ Pointers: Memory Address to Dereferencing</h1>
+      
+      <div class="article-meta-row">
+        <div class="article-date">
+          <span>Feb 15, 2024</span>
+        </div>
+        <div class="reading-time">
+          <span>8 min read</span>
+        </div>
+      </div>
+
+      <div class="article-tags-row">
+        <span class="article-tag">C++</span>
+        <span class="article-tag">Memory Management</span>
+        <span class="article-tag">Pointers</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE CONTENT -->
+  <section id="article-content">
+    <div class="container">
+      
+      <!-- Problem -->
+      <div class="article-section">
+        <h2><span class="emoji">🧠</span> Problem</h2>
+        <p>While learning data structures, I kept getting segmentation faults when working with dynamic arrays. I didn't truly understand what pointers were doing under the hood. I could use them mechanically — declare with `*`, dereference with `*`, allocate with `new` — but couldn't visualize memory or predict when things would crash.</p>
+        <p>This lack of understanding made debugging incredibly frustrating. Every pointer error felt random.</p>
+      </div>
+
+      <!-- Error / Bug -->
+      <div class="article-section">
+        <h2><span class="emoji">⚠️</span> Error / Bug</h2>
+        <p>Here's the error I kept hitting:</p>
+        
+        <div class="code-block">
+          <pre><code>Segmentation fault (core dumped)</code></pre>
+        </div>
+
+        <p>A simple example that would crash:</p>
+
+        <div class="code-block">
+          <pre><code class="language-cpp">int* ptr = new int(42);
+delete ptr;
+std::cout &lt;&lt; *ptr;  // CRASH! Accessing deleted memory</code></pre>
+        </div>
+
+        <p>The program would segfault inconsistently. Sometimes it worked, sometimes it crashed. This randomness is what made it scary.</p>
+      </div>
+
+      <!-- Root Cause -->
+      <div class="article-section">
+        <h2><span class="emoji">🔍</span> Root Cause</h2>
+        <p>The issue was <strong>use-after-free</strong>: I was using pointers without understanding memory layout. After deleting memory, the pointer still held the address — but the memory was no longer valid.</p>
+
+        <h3>Why did it randomly crash?</h3>
+        <ul>
+          <li>The freed memory might be reused by the OS for something else</li>
+          <li>Sometimes the old value was still there, so reads worked</li>
+          <li>Eventually, writes would hit a page that triggered protection checks</li>
+        </ul>
+
+        <h3>My mental model was wrong:</h3>
+        <p>I thought pointers were "magical variables that point to things." I didn't grasp that:</p>
+        <ul>
+          <li>A pointer is just a 64-bit integer (on 64-bit systems) storing a memory address</li>
+          <li>Stack memory is automatically freed when it goes out of scope</li>
+          <li>Heap memory persists until YOU explicitly call `delete`</li>
+          <li>Dereferencing an invalid pointer reads/writes to arbitrary memory</li>
+        </ul>
+      </div>
+
+      <!-- Solution -->
+      <div class="article-section">
+        <h2><span class="emoji">🛠️</span> Solution</h2>
+        <p>I built a small project to visualize pointer behavior:</p>
+
+        <div class="callout">
+          <p><strong>The Pointer Visualizer:</strong> A C++ program that prints memory addresses and values as I allocated and deallocated memory, then used GDB to step through and see exact memory state.</p>
+        </div>
+
+        <div class="code-block">
+          <pre><code class="language-cpp">// 1. Stack vs Heap
+int stackVar = 42;              // Lives on stack
+int* heapVar = new int(42);     // Lives on heap
+
+std::cout &lt;&lt; &stackVar;       // Stack address ~0x7fff...
+std::cout &lt;&lt; heapVar;         // Heap address ~0x560...
+
+// 2. Manual memory management
+delete heapVar;
+// Now heapVar still holds old address (dangling pointer)
+// But dereferencing = undefined behavior
+
+// 3. Solution: Smart pointers
+std::unique_ptr&lt;int&gt; smartPtr(new int(42));
+// Automatically deleted when smartPtr goes out of scope</code></pre>
+        </div>
+
+        <h3>Key realizations:</h3>
+        <ul>
+          <li><strong>GDB is your friend:</strong> Use `print &variable` to see addresses, `print *pointer` to see values</li>
+          <li><strong>Valgrind catches memory errors:</strong> Run `valgrind ./program` to detect use-after-free before crashes</li>
+          <li><strong>Smart pointers (unique_ptr, shared_ptr) prevent these bugs:</strong> The memory is freed automatically</li>
+        </ul>
+      </div>
+
+      <!-- Key Takeaway -->
+      <div class="article-section">
+        <h2><span class="emoji">💡</span> Key Takeaway</h2>
+        
+        <div class="callout">
+          <p><strong>Pointers are just variables that store memory addresses.</strong> Understanding stack vs heap is crucial. Always check if memory is still valid before dereferencing. Use tools (GDB, Valgrind) to catch errors early.</p>
+        </div>
+
+        <p><strong>Best practices:</strong></p>
+        <ul>
+          <li>Prefer stack allocation when possible</li>
+          <li>If you must use heap, use smart pointers (unique_ptr, shared_ptr)</li>
+          <li>Never dereference after delete</li>
+          <li>Use RAII (Resource Acquisition Is Initialization) pattern</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ARTICLE FOOTER -->
+  <section id="article-footer">
+    <div class="container">
+      <div class="article-nav">
+        <a href="../articles.html" class="back-link">← Back to articles</a>
+      </div>
+
+      <div style="margin-bottom: 40px;">
+        <p style="font-family: var(--font-head); color: var(--muted); font-size: 12px; margin-bottom: 12px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.08em;">Share this article</p>
+        <div style="display: flex; gap: 12px;">
+          <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; transition: all var(--t); text-decoration: none;" title="Share on Twitter">
+            <span style="font-size: 18px;">𝕏</span>
+          </a>
+          <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; transition: all var(--t); text-decoration: none;" title="Share on LinkedIn">
+            <span style="font-size: 18px;">in</span>
+          </a>
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 40px 0;">
+
+      <div>
+        <p style="font-family: var(--font-head); color: var(--text); font-size: 14px; font-weight: 700; margin-bottom: 16px;">More Articles</p>
+        <div class="related-articles">
+          <a href="sorting-complexity.html" class="related-card">
+            <h4>Sorting Algorithm Complexity: Theory vs Practice</h4>
+            <p>Analyzing bubble sort, merge sort, and quicksort with real timing data.</p>
+          </a>
+          <a href="linux-file-permissions.html" class="related-card">
+            <h4>Linux File Permissions Demystified</h4>
+            <p>Breaking down ls output, chmod, umask, and why 755 seems magical.</p>
+          </a>
+          <a href="git-internals.html" class="related-card">
+            <h4>Git Internals: How .git Objects Store Your Code</h4>
+            <p>Exploring the .git folder structure and understanding commits as DAGs.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot-inner">
+        <p class="foot-copy">Built by <span>Ibraheem Chand</span> — hand-coded, no frameworks.</p>
+        <a href="../index.html" style="color: var(--muted); transition: color var(--t);">← Back to home</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================
+    // HAMBURGER MENU
+    // ============================================
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileNav.classList.toggle('open');
+      document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileNav.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+
+</body>
+</html>
